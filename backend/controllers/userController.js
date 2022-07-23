@@ -14,12 +14,13 @@ const registerUser = asyncHandler(async(req, res) => {
     }
 
     //check if user exist
-    const userExist = await User.findOne({email})
+    const userExists = await User.findOne({email})
 
-    if(userExist){
+    if(userExists){
         res.status(400)
         throw Error('User already exists')
     }
+    
 
     //hash password
     const salt = await bcrypt.genSalt(10)
@@ -71,6 +72,13 @@ const loginUser = asyncHandler(async(req, res) => {
 const getMe = asyncHandler(async(req, res) => {
     res.json({ message: "User data display" })
 })
+
+//generate JWT
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: "30d",
+    });
+};
 
 module.exports = {
     registerUser,
