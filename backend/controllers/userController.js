@@ -12,6 +12,15 @@ const registerUser = asyncHandler(async(req, res) => {
         res.status(400)
         throw Error('Please add all fields')
     }
+
+    //check if user exist
+    const userExist = await User.findOne({email})
+
+    if(userExist){
+        res.status(400)
+        throw Error('User already exists')
+    }
+
     res.json({ message: "Register User" })
 })
 
